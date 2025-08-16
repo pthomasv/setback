@@ -2,18 +2,18 @@ import React, { useState } from 'react';
 import { io } from "socket.io-client";
 
 function Readybutton({id, socket}) {
-    const [readybuttonText, setReadyButtonText] = useState('READY');
+    const [readybuttonText, setReadyButtonText] = useState('READY-UP');
     const [readybuttonColor, setReadyButtonColor] = useState('green');
     
 
     const handleClick = () => {
-        if(readybuttonText == "READY"){
+        if(readybuttonText == "READY-UP"){
             setReadyButtonText('CANCEL'); 
             setReadyButtonColor('red');
             socket.emit('ready from client',true)
         }
         else{
-            setReadyButtonText('READY'); 
+            setReadyButtonText('READY-UP'); 
             setReadyButtonColor('green')
             socket.emit('ready from client',false)
         }

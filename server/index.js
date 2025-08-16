@@ -30,6 +30,16 @@ function newDeck(){
     }
 }
 
+function checkIfAllPlayersAreReady(){
+  for(const player in players){
+    console.log(player)
+    if(!players[player]["ready"]){
+      return false
+    }
+  }
+  return true
+}
+
 
 app.use(cors({
     origin: "http://localhost:5173", // allows HTTP requests from :5173
@@ -74,7 +84,7 @@ io.on('connection', (socket) => { //when client connects, socket object is creat
         id: socket.id,
         ready: false
     }
-
+    
     socket.on('disconnect', () => {
       console.log('user disconnected');
       const index = connectedIds.indexOf(socket.id);
@@ -91,15 +101,20 @@ io.on('connection', (socket) => { //when client connects, socket object is creat
     console.log("connectedIds to send: "+connectedIds)
     io.emit('list of connected ids', connectedIds)
     io.emit('players', players)
+    io.emit('all players ready', 'Waiting On Players...')
 
     socket.on('ready from client', (ready_status) => {
         players[socket.id].ready = ready_status
         io.emit('players', players)
+        console.log("checking if all players are ready")
+        if(checkIfAllPlayersAreReady()){
+          console.log("all players are ready")
+          io.emit('all players ready', 'Start Game')
+        }
     })
 
+
   });
-
-
 
 server.listen(3000, () => {
   console.log('server running at http://localhost:3000');
