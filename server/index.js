@@ -30,6 +30,11 @@ function newDeck(){
     }
 }
 
+function giveAllPlayersCards(){
+  console.log("all players given cards")
+  
+}
+
 function checkIfAllPlayersAreReady(){
   for(const player in players){
     console.log(player)
@@ -38,6 +43,14 @@ function checkIfAllPlayersAreReady(){
     }
   }
   return true
+}
+
+function checkIfThereAreEnoughPlayers(){
+  const length = Object.keys(players).length
+  console.log("there are "+length+" players in the loby")
+  if(length > 1 && length < 5){
+    return true
+  }
 }
 
 
@@ -56,15 +69,15 @@ app.get('/', (req, res) => {
   console.log("page loaded")
 });
 
-app.get('/start', (req,res) => {
-    newDeck()
-    if(connectedIds.length < 2){
-        res.send("not enough players")
-    }
-    else{
-        res.send("enough players")       
-    }  
-})
+// app.get('/start', (req,res) => {
+//     newDeck()
+//     if(connectedIds.length < 2){
+//         res.send("not enough players")
+//     }
+//     else{
+//         res.send("enough players")       
+//     }  
+// })
 
 app.get('/deal', (req,res) => {
     let hand = new Queue
@@ -74,6 +87,10 @@ app.get('/deal', (req,res) => {
     res.json(hand.printQueue)
 })
 
+app.get("/players", (req, res) => {
+  res.send(players);
+});
+
 io.on('connection', (socket) => { //when client connects, socket object is created, and its passed to the callback
     
     console.log('socket '+socket.id+' connected');
@@ -82,7 +99,9 @@ io.on('connection', (socket) => { //when client connects, socket object is creat
     //add player to players dictionary
     players[socket.id] = {
         id: socket.id,
-        ready: false
+        ready: false,
+        showdeck: false,
+        deck: [],
     }
     
     socket.on('disconnect', () => {
@@ -107,13 +126,20 @@ io.on('connection', (socket) => { //when client connects, socket object is creat
         players[socket.id].ready = ready_status
         io.emit('players', players)
         console.log("checking if all players are ready")
-        if(checkIfAllPlayersAreReady()){
+        if(checkIfAllPlayersAreReady() && checkIfThereAreEnoughPlayers()){
           console.log("all players are ready")
           io.emit('all players ready', 'Start Game')
         }
+        else{
+          console.log("not all players are ready")
+          io.emit('all players ready', 'Waiting On Players')
+        }
     })
 
-
+    socket.on('pressed start',  (socker_id) => {
+      giveAllPlayersCards()
+      io.emit("reveal decks", true)
+    })
   });
 
 server.listen(3000, () => {

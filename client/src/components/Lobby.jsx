@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { io } from "socket.io-client";
 import Readybutton from '../buttons/readybutton';
 import "../App.css"
 
 
 function Lobby() {
+    // const socketRef = useRef(null) // store the socket in a useRef to avoid re-renders
     const [count, setCount] = useState(0)
     const [connections, setConnections] = useState([])
     const [startmessage, setStartmessage] = useState("game pending")
@@ -12,7 +13,8 @@ function Lobby() {
     const [mysocket, setMysocket] = useState([])
     const [readies, setReadies] = useState([])
     const [players, setPlayers] = useState({})
-    const [allplayersready, setAllplatersready] = useState("Waiting On Players...")
+    const [allplayersready, setAllplayersready] = useState("Waiting On Players...")
+    const [showcards, setShowCards] = useState(false)
   
     
   
@@ -20,7 +22,13 @@ function Lobby() {
     const input = document.getElementById('input');
     const messages = document.getElementById('messages');
     
-    
+    function handleStartGameButtonClick() {
+      if (!mysocket) {return}
+      console.log("Button clicked!");
+      mysocket.emit("pressed start", mysocket.id)
+      // setPressedStartGame(true)
+
+    }
   
     useEffect(() => {
       const socket = io("http://localhost:3000"); // your server URL
@@ -38,7 +46,11 @@ function Lobby() {
       })
   
       socket.on("all players ready",msg => {
-        setAllplatersready(msg)
+        setAllplayersready(msg)
+      })
+
+      socket.on("reveal decks", bool => {
+        setShowCards(bool)
       })
   
       return () => socket.disconnect();
@@ -60,22 +72,12 @@ function Lobby() {
             </div>
         </div>
         <div className="card" style={{ border: "1px solid red" }}>
-          {/* <button onClick={() => fetch("http://localhost:3000/start")
-            .then(response => response.text())
-            .then(text => setStartmessage(text)
-            )}>Start Game</button> */}
-          <button>{allplayersready}</button>
-          {/* <button>{startmessage}</button> */}
-          {/* <button>Total Players: {connections.length}</button> */}
-          {/* <button onClick={() => fetch("http://localhost:3000/deal")
-            .then(response => response.json())
-            .then(hand => console.log(hand))
-            }>Deal</button> */}
-            <Readybutton id={mysocket.id} socket={mysocket}/>
+          <button id="startGameButton" onClick={handleStartGameButtonClick}>{allplayersready}</button>
+          <Readybutton id={mysocket.id} socket={mysocket}/>
         </div>
-        <form id="form" action="">
+        {/* <form id="form" action="">
           <input id="input" autoComplete="off" /><button>Send</button>
-        </form>
+        </form> */}
       </>
     )
   }

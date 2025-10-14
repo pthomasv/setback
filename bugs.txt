@@ -1,0 +1,5 @@
+notable bugs:
+
+*should a player time out (not disconnect), upon reconnecting, their status 
+will be listed as Not ready but the ready button will still say canceled
+
