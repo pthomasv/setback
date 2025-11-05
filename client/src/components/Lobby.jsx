@@ -4,7 +4,7 @@ import Readybutton from '../buttons/readybutton';
 import "../App.css"
 
 
-function Lobby() {
+function Lobby({setPressedStartGame}) {
     // const socketRef = useRef(null) // store the socket in a useRef to avoid re-renders
     const [count, setCount] = useState(0)
     const [connections, setConnections] = useState([])
@@ -15,19 +15,20 @@ function Lobby() {
     const [players, setPlayers] = useState({})
     const [allplayersready, setAllplayersready] = useState("Waiting On Players...")
     const [showcards, setShowCards] = useState(false)
+    const [test, setTest] = useState(0)
+    const [myID, setMyID] = useState("")
   
-    
-  
-    const form = document.getElementById('form');
-    const input = document.getElementById('input');
-    const messages = document.getElementById('messages');
+    // const form = document.getElementById('form');
+    // const input = document.getElementById('input');
+    // const messages = document.getElementById('messages');
     
     function handleStartGameButtonClick() {
       if (!mysocket) {return}
+      if (allplayersready == "Waiting On Players...") {return}
       console.log("Button clicked!");
-      mysocket.emit("pressed start", mysocket.id)
-      // setPressedStartGame(true)
-
+      console.log(test)
+      mysocket.emit("pressed start", mysocket.id);
+      
     }
   
     useEffect(() => {
@@ -35,6 +36,8 @@ function Lobby() {
       setMysocket(socket)
       socket.on("connect", () => {
         console.log("connected with id:", socket.id);
+        setMyID(socket.id);
+        console.log("my id is ",socket.id)
       });
   
       socket.on('list of connected ids', (connectedIds) => {
@@ -45,12 +48,22 @@ function Lobby() {
         setPlayers(players)
       })
   
-      socket.on("all players ready",msg => {
+      socket.on("all players ready", msg => {
         setAllplayersready(msg)
       })
 
       socket.on("reveal decks", bool => {
         setShowCards(bool)
+      })
+
+      socket.on('show cardfield', bool => {
+        setPressedStartGame(bool)
+        }
+      )
+
+      socket.on(myID, deck => {
+        console.log("I recieved a hand of cards")
+        console.log(deck)
       })
   
       return () => socket.disconnect();
@@ -78,6 +91,7 @@ function Lobby() {
         {/* <form id="form" action="">
           <input id="input" autoComplete="off" /><button>Send</button>
         </form> */}
+
       </>
     )
   }
