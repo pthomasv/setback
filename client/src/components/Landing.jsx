@@ -15,7 +15,7 @@ function Landing({setTooManyPlayers, setGameStarted, setPressedJoined}) {
               // if(game_started){
               //   setGameStarted(false)
               // }
-              if (length > 3){
+              if (length > 1){ //only allow 2 players to join
                 setTooManyPlayers(true)
               }
               else{

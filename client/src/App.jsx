@@ -10,14 +10,15 @@ function App() {
   const [pressedStartGame, setPressedStartGame] = useState(false)
   const [toomanyPlayers, setTooManyPlayers] = useState(false)
   const [gameStarted, setGameStarted] = useState(false)
+  const [myID, setMyID] = useState("")
 
   return (
     <>
     pressedStartGame: {pressedStartGame ? "true" : "false"}
     {!pressedJoined && <Landing setTooManyPlayers={setTooManyPlayers} setPressedJoined={setPressedJoined} setGameStarted={setGameStarted}></Landing>}
     {/* we pass "setTooManyPlayers as a argument. If you look at the Landing function, you will see that it expects two arguments, setTooManyPlayers and setPressedJoined" */}
-    {!toomanyPlayers && pressedJoined && <Lobby setPressedStartGame={setPressedStartGame}></Lobby>}
-    {pressedStartGame && <Cardfield ></Cardfield>}
+    {!toomanyPlayers && pressedJoined && <Lobby setPressedStartGame={setPressedStartGame} setMyID={setMyID}></Lobby>}
+    {pressedStartGame && <Cardfield myID={myID}></Cardfield>}
     {gameStarted && <div>Game In Progress</div>}
     {toomanyPlayers && <div>Lobby Full</div>}
     </>

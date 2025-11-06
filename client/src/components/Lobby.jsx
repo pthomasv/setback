@@ -4,7 +4,7 @@ import Readybutton from '../buttons/readybutton';
 import "../App.css"
 
 
-function Lobby({setPressedStartGame}) {
+function Lobby({setPressedStartGame, setMyID}) {
     // const socketRef = useRef(null) // store the socket in a useRef to avoid re-renders
     const [count, setCount] = useState(0)
     const [connections, setConnections] = useState([])
@@ -16,7 +16,7 @@ function Lobby({setPressedStartGame}) {
     const [allplayersready, setAllplayersready] = useState("Waiting On Players...")
     const [showcards, setShowCards] = useState(false)
     const [test, setTest] = useState(0)
-    const [myID, setMyID] = useState("")
+    const [disconnect, setDisconnect] = useState(false)
   
     // const form = document.getElementById('form');
     // const input = document.getElementById('input');
@@ -61,12 +61,12 @@ function Lobby({setPressedStartGame}) {
         }
       )
 
-      socket.on(myID, deck => {
-        console.log("I recieved a hand of cards")
-        console.log(deck)
-      })
+      // socket.on(myID, deck => {
+      //   console.log("I recieved a hand of cards")
+      //   console.log(deck)
+      // })
   
-      return () => socket.disconnect();
+      return () => {socket.disconnect()};
   
     }, []);
   
@@ -84,9 +84,9 @@ function Lobby({setPressedStartGame}) {
               ))}
             </div>
         </div>
-        <div className="card" style={{ border: "1px solid red" }}>
+        <div className="card" style={{ border: "0px solid red" }}>
           <button id="startGameButton" onClick={handleStartGameButtonClick}>{allplayersready}</button>
-          <Readybutton id={mysocket.id} socket={mysocket}/>
+          <Readybutton disconnect={disconnect} id={mysocket.id} socket={mysocket}/>
         </div>
         {/* <form id="form" action="">
           <input id="input" autoComplete="off" /><button>Send</button>

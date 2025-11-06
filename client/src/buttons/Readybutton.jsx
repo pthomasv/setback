@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import { io } from "socket.io-client";
 
-function Readybutton({id, socket}) {
+function Readybutton({disconnect, id, socket}) {
     const [readybuttonText, setReadyButtonText] = useState('READY-UP');
     const [readybuttonColor, setReadyButtonColor] = useState('green');
     
+    // if(disconnect){
+    //     setReadyButtonText('READY-UP'); 
+    //     setReadyButtonColor('green')
+    // }
 
     const handleClick = () => {
         if(readybuttonText == "READY-UP"){

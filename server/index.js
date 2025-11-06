@@ -13,6 +13,7 @@ let shuffledDeck_Queue = new Queue;
 const app = express();
 const server = createServer(app);
 const players = {};
+var game_started = false;
 const io = new Server(server, {
     cors: {
         origin: "http://localhost:5173", // allow socket.io connections from :5173
@@ -53,6 +54,11 @@ function checkIfThereAreEnoughPlayers(){
   }
 }
 
+function whowinsbid(player1Bid, player2Bid){
+    
+  
+}
+
 
 app.use(cors({
     origin: "http://localhost:5173", // allows HTTP requests from :5173
@@ -68,6 +74,10 @@ let connectedIds = []
 app.get('/', (req, res) => {
   console.log("page loaded")
 });
+
+app.get('/gethand', (req, res) =>{
+  res.send(players[req.query.id]["deck"])
+})
 
 // app.get('/start', (req,res) => {
 //     newDeck()
@@ -90,6 +100,12 @@ app.get('/deal', (req,res) => {
 app.get("/players", (req, res) => {
   res.send(players);
 });
+
+app.get("/canijoin", (req, res) => {
+  res.send({"game_started": game_started, "players": players});
+});
+
+
 
 io.on('connection', (socket) => { //when client connects, socket object is created, and its passed to the callback
     
@@ -136,9 +152,23 @@ io.on('connection', (socket) => { //when client connects, socket object is creat
         }
     })
 
-    socket.on('pressed start',  (socker_id) => {
-      giveAllPlayersCards()
-      io.emit("reveal decks", true)
+    socket.on('pressed start',  (socket_id) => {
+      newDeck()
+      game_started = true
+      console.log("start game button pressed by user:", socket_id)
+      io.emit("show cardfield", true)
+
+      for(const player in players){
+        let hand = new Queue
+        let reciever = String(players[player]["id"])
+        for (let i = 0; i < 7; i++) {
+            hand.enqueue(shuffledDeck_Queue.dequeue());
+        }
+        players[player]["deck"] = hand
+        // io.emit(reciever, hand) - alt: send the hand via the socket
+        console.log(hand, reciever)
+
+      }
     })
   });
 
