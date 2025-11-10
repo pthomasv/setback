@@ -44,14 +44,22 @@
 .listofplayers{
   display: flex;
   flex-direction: column;
+  gap: 10px
+}
+
+.player-btn {
+  min-width: 120px;
+  padding: 0.6rem 1rem;
+  text-align: center;
+  margin: 2px;
 }
 
 
 .box {
-  /* border: 2px dotted rgb(96 139 168); */
   display: flex;
   align-items: stretch;
   gap: 10px;
+  
 }
 
 .box div {
@@ -59,13 +67,31 @@
   height: 140px;
   background-color: rgb(96 139 168 / 0.2);
   background-size: cover;
-  border: 2px solid rgb(96 139 168);
+  /* border: 2px solid rgb(96 139 168); */
   border-radius: 5px;
   transition: transform 0.18s ease;
+  
 }
 
 .box div:hover{
   transform: translateY(-3px);
+}
+
+
+.opbox {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+}
+
+.opbox div {
+  width: 100px;
+  height: 140px;
+  background-color: rgb(96 139 168 / 0.2);
+  background-size: cover;
+  /* border: 2px solid rgb(96 139 168); */
+  border-radius: 5px;
+  transition: transform 0.18s ease;
 }
 
 .bidbox{
@@ -75,57 +101,152 @@
   align-items: center;
   margin: 10px;
   gap: 10px;
+  font-size: 1em;
+  font-weight: 750;
+  font-family: inherit;
 }
 
-.bid2{
-  width: 50px; /* Example width */
-  height: 50px; /* Must be equal to width for a perfect circle */
-  background-color: #F7D154; /* Example color */
+.bid{
+  width: 50px; 
+  height: 50px; 
   display: flex;
   align-items: center; 
   justify-content: center;
+  transition: transform 0.18s ease;
+}
+
+.b2{
+  background-color: grey;
   border-top-left-radius: 10%;
-  border-bottom-left-radius: 10%;
-  transition: transform 0.18s ease;
-}
-.bid2:hover{
-  transform: scale(1.05);
+  border-bottom-left-radius: 10%; 
 }
 
-.bid3{
-  width: 50px; /* Example width */
-  height: 50px; /* Must be equal to width for a perfect circle */
-  background-color: #F7931E; /* Example color */
-  display: flex;
-  align-items: center; 
-  justify-content: center;
-  transition: transform 0.18s ease;
+.b2.selected{
+ background-color: #F7D154;
+}
+.b2:hover{
+  box-shadow:
+  0 0 8px rgba(247, 209, 84, 0.5),
+  0 0 16px rgba(247, 209, 84, 0.35),
+  0 0 24px rgba(247, 209, 84, 0.2);
 }
 
-.bid3:hover{
-  transform: scale(1.05);
+.b3{
+  background-color: grey; 
 }
 
-.bid4{
-  width: 50px; /* Example width */
-  height: 50px; /* Must be equal to width for a perfect circle */
-  background-color: #E63946; /* Example color */
-  display: flex;
-  align-items: center; 
-  justify-content: center;
+.b3.selected{
+  background-color: #F7931E;
+}
+
+.b3:hover{
+  box-shadow:
+  0 0 8px rgba(247, 147, 30, 0.5),
+  0 0 16px rgba(247, 147, 30, 0.35),
+  0 0 24px rgba(247, 147, 30, 0.2);
+}
+
+.b4{
+  background-color: grey; 
   border-top-right-radius: 10%;
   border-bottom-right-radius: 10%;
-  transition: transform 0.18s ease;
 }
-.bid4:hover{
-  background-color: #E63946; /* Example color */
+
+.b4.selected{
+  background-color: #E63946;
+}
+
+.b4:hover{
+  box-shadow:
+  0 0 8px rgba(230, 57, 70, 0.55),
+  0 0 16px rgba(230, 57, 70, 0.35),
+  0 0 24px rgba(230, 57, 70, 0.2);
+}
+
+.bid:hover{
   transform: scale(1.05);
+}
+
+.bid:active {
+  transform: scale(1);
 }
 
 .pass{
-  width: 50px; /* Example width */
-  height: 50px; /* Must be equal to width for a perfect circle */
-  background-color: #1E90FF; /* Example color */
+  width: 50px; 
+  height: 50px; 
+  background-color: grey; 
+  border-radius: 50%;
+  display: flex;
+  align-items: center; 
+  justify-content: center;
+  transition: transform 0.18s ease;
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0)
+}
+
+.pass:hover{
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+}
+
+.pass:active{
+  transform: scale(1.00);
+}
+
+.pass.selected{
+  background-color: #1E90FF; 
+}
+
+
+.opbid{
+  width: 50px; 
+  height: 50px; 
+  display: flex;
+  align-items: center; 
+  justify-content: center;
+}
+
+.op2{
+  background-color: grey; 
+  border-top-left-radius: 10%;
+  border-bottom-left-radius: 10%; 
+}
+
+.op3{
+  background-color: grey;  
+}
+
+.op4{
+  background-color: grey;  
+  border-top-right-radius: 10%;
+  border-bottom-right-radius: 10%;
+}
+
+
+.op2.highlight{
+  background-color: #F7D154; 
+  border-top-left-radius: 10%;
+  border-bottom-left-radius: 10%; 
+}
+
+.op3.highlight{
+  background-color: #F7931E;  
+}
+
+.op4.highlight{
+  background-color: #E63946;  
+  border-top-right-radius: 10%;
+  border-bottom-right-radius: 10%;
+}
+
+.oppass.highlight{
+  background-color: #1E90FF;
+}
+
+
+.oppass{
+  width: 50px; 
+  height: 50px; 
+  background-color: grey; 
   border-radius: 50%;
   display: flex;
   align-items: center; 
@@ -133,9 +254,64 @@
   transition: transform 0.18s ease;
 }
 
-.pass:hover{
-  transform: scale(1.05);
+
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+  cursor: default;
 }
 
 
+.hide{
+  display: none
+}
 
+.pulse-button {
+  display: inline-block;
+  padding: 10px 20px;
+  color: #fff;
+  background-color: #68f478;   /* your real color */
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform 0.18s ease;
+}
+
+.pulse-button.disabled {
+  background-color: #e5e5e5;     
+  color: #9e9e9e;                
+  cursor: not-allowed;           
+  animation: none;               
+  box-shadow: none !important;   
+  opacity: 0.8;   
+  
+}
+
+.bid.disabled{
+  background-color: #e5e5e5;     
+  color: #9e9e9e;                
+  cursor: not-allowed;           
+  animation: none;               
+  box-shadow: none !important;   
+  opacity: 0.8;  
+  pointer-events: none;
+}
+
+
+.pulse-button:hover{
+  transform: scale(1.05);
+}
+
+.pulse-button.disabled:hover{
+  transform: scale(1.00);
+}
+
+.unclickable div{
+  pointer-events: none;
+}

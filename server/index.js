@@ -8,11 +8,13 @@ import { Server } from 'socket.io';
 import { cards } from "./cards.js"
 import { Queue } from "./cards.js"
 import { FYshuffle } from './cards.js';
+import { stringify } from 'node:querystring';
 
 let shuffledDeck_Queue = new Queue;
 const app = express();
 const server = createServer(app);
 const players = {};
+var turn = 0
 var game_started = false;
 const io = new Server(server, {
     cors: {
@@ -31,10 +33,6 @@ function newDeck(){
     }
 }
 
-function giveAllPlayersCards(){
-  console.log("all players given cards")
-  
-}
 
 function checkIfAllPlayersAreReady(){
   for(const player in players){
@@ -55,9 +53,29 @@ function checkIfThereAreEnoughPlayers(){
 }
 
 function whowinsbid(player1Bid, player2Bid){
-    
   
 }
+
+function whosturn(turn){
+  // console.log("players keys:",Object.keys(players))
+  if(turn%2 == 0){
+    return(Object.keys(players)[0]) //returns first players socket.id
+  }
+  else{
+    return(Object.keys(players)[1]) //returns second players socket.id
+  }
+}
+
+function whosturnisitnot(turn){
+  // console.log("players keys:",Object.keys(players))
+  if(turn%2 == 0){
+    return(Object.keys(players)[1]) //returns second players socket.id if its not their turn
+  }
+  else{
+    return(Object.keys(players)[0]) //returns second players socket.id if its not their turn
+  }
+}
+
 
 
 app.use(cors({
@@ -107,7 +125,7 @@ app.get("/canijoin", (req, res) => {
 
 
 
-io.on('connection', (socket) => { //when client connects, socket object is created, and its passed to the callback
+io.on('connection', (socket) => { //when client connects, socket object is created, and its passed to the callback (socket)
     
     console.log('socket '+socket.id+' connected');
     connectedIds.push(socket.id)
@@ -118,7 +136,11 @@ io.on('connection', (socket) => { //when client connects, socket object is creat
         ready: false,
         showdeck: false,
         deck: [],
+        bid: [],
     }
+
+    turn = Object.keys(players).length
+    console.log("turn is", turn)
     
     socket.on('disconnect', () => {
       console.log('user disconnected');
@@ -148,7 +170,7 @@ io.on('connection', (socket) => { //when client connects, socket object is creat
         }
         else{
           console.log("not all players are ready")
-          io.emit('all players ready', 'Waiting On Players')
+          io.emit('all players ready', 'Waiting On Players...')
         }
     })
 
@@ -169,6 +191,43 @@ io.on('connection', (socket) => { //when client connects, socket object is creat
         console.log(hand, reciever)
 
       }
+
+      console.log("notifying", whosturn(turn), "that it is their turn")
+      io.to(whosturn(turn)).emit("turn", 1)
+      io.to(whosturnisitnot(turn)).emit("notturn", 0)
+
+
+    })
+
+    socket.on("my bid", (bidNplayer) => {
+      console.log("player", bidNplayer[1], "made", bidNplayer[0])
+
+      //first, record the player's bid in the players dictionary
+      players[String(bidNplayer[1])].bid = bidNplayer[0];
+      //tell the opponent what the players bid was so they can highlight the opfield accordingly
+      io.to(whosturnisitnot(turn)).emit("opponent's bid", bidNplayer[0])
+
+      //because we told the opponent the players bid, it is now the opponents bid. so we should increment the turn
+      turn+=1
+      io.to(whosturn(turn)).emit("turn", 1) //notify the opponent it is their turn
+      io.to(whosturnisitnot(turn)).emit("notturn", 0) //notify the player it is not their turn
+
+
+      console.log(players)
+      //now we need to tell the other player the players bid
+
+      //if player did bid of 4
+      // if(bidNplayer[0] == "bidof4"){
+      //   //we still store the bid
+        
+      //   //we don't increment the turn as it will be the players turn to start laying cards. but they still need to choose the suite
+
+      //   //notify the opponenet of the player's bid so that we can highlight the opfield bid number
+      //   io.to(whosturnisitnot(turn).emit("opponents bid", "4"))
+      // }
+
+      //if player did bid of 0 (pass)
+    
     })
   });
 

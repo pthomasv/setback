@@ -4,7 +4,7 @@ import Readybutton from '../buttons/readybutton';
 import "../App.css"
 
 
-function Lobby({setPressedStartGame, setMyID}) {
+function Lobby({setPressedStartGame, setMyID, bidNplayer, setMyturn}) {
     // const socketRef = useRef(null) // store the socket in a useRef to avoid re-renders
     const [count, setCount] = useState(0)
     const [connections, setConnections] = useState([])
@@ -17,6 +17,8 @@ function Lobby({setPressedStartGame, setMyID}) {
     const [showcards, setShowCards] = useState(false)
     const [test, setTest] = useState(0)
     const [disconnect, setDisconnect] = useState(false)
+    const [bid, setBid] = useState();
+  
   
     // const form = document.getElementById('form');
     // const input = document.getElementById('input');
@@ -27,6 +29,7 @@ function Lobby({setPressedStartGame, setMyID}) {
       if (allplayersready == "Waiting On Players...") {return}
       console.log("Button clicked!");
       console.log(test)
+      console.log("allplayersready",{allplayersready},"so I was able to press start")
       mysocket.emit("pressed start", mysocket.id);
       
     }
@@ -56,36 +59,81 @@ function Lobby({setPressedStartGame, setMyID}) {
         setShowCards(bool)
       })
 
+      socket.on("turn", (turn) => {
+        console.log("its my turn!")
+
+        //because its my turn, we can enable all the bid options
+
+        const bid2 = document.getElementById("2")
+        const bid3 = document.getElementById("3")
+        const bid4 = document.getElementById("4")
+        const bidpass = document.getElementById("0")
+        const bidbox = document.getElementById("bidbox") //confirming the bid will shut off all bid options so they can't be clicked 
+
+        if(!bid2){
+          return
+        }
+        bid2.classList.remove("disabled")
+        bid3.classList.remove("disabled")
+        bid4.classList.remove("disabled")
+        bidpass.classList.remove("disabled")
+        bidbox.classList.remove("unclickable")
+
+        setMyturn(turn) // this sets myturn to 1
+      })
+
+      socket.on("notturn", (turn) => {
+        console.log("its NOT my turn!")
+        // const OPbidNpass = document.getElementById("OPbidNpass") //uncomment if you wish to hid the opponents bid
+        // OPbidNpass.classList.remove("hide")
+        setMyturn(turn) // this sets myturn to 0
+      })
+
+      socket.on("opponent's bid", (opbid) => {
+        console.log("opponent's bid!!!", opbid)
+        const IDtohighlight = "opbidof"+opbid
+        const opbuttontohighlight = document.getElementById(IDtohighlight)
+        opbuttontohighlight.classList.add("highlight")
+      })
+
       socket.on('show cardfield', bool => {
         setPressedStartGame(bool)
+        const startNready = document.getElementById("startNready")
+        startNready.classList.add("hide")
+        const listofplayers = document.getElementById("listofplayers")
+        listofplayers.classList.add("hide")
         }
       )
-
-      // socket.on(myID, deck => {
-      //   console.log("I recieved a hand of cards")
-      //   console.log(deck)
-      // })
   
       return () => {socket.disconnect()};
   
     }, []);
+
+
+
+    useEffect(() => {
+      console.log("MY SOCKET", mysocket)
+      if(mysocket.length===0){ //because bidNplayer is passed to lobby in App.jsx before it is defined, mysocket.emit will not work
+        return //thus we must wait until it is populated with something ie it doesnt equal 0
+      }
+      mysocket.emit("my bid", bidNplayer)
+    }, [bidNplayer])
+    
   
   
   
     return (
       <>
-        <div className="listofplayers" style={{ border: "1px solid red" }}>
-            <div>
+        <div id="listofplayers" className="listofplayers">
               {connections.map((id) => (
               <div key={id}>
-                <button>player {connections.indexOf(id)+1}</button>
-                <button>{players[id].ready ? "Ready" : "Not Ready"}</button>
+                <button className='player-btn'>player {connections.indexOf(id)+1}</button>
+                <button className='player-btn'>{players[id].ready ? "Ready" : "Not Ready"}</button>
               </div>
               ))}
-            </div>
         </div>
-        <div className="card" style={{ border: "0px solid red" }}>
-          <button id="startGameButton" onClick={handleStartGameButtonClick}>{allplayersready}</button>
+        <div id="startNready" className="card noselect">
+          <button className='player-btn' id="startGameButton" onClick={handleStartGameButtonClick}>{allplayersready}</button>
           <Readybutton disconnect={disconnect} id={mysocket.id} socket={mysocket}/>
         </div>
         {/* <form id="form" action="">
