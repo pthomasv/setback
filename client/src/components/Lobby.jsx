@@ -18,11 +18,7 @@ function Lobby({setPressedStartGame, setMyID, bidNplayer, setMyturn}) {
     const [test, setTest] = useState(0)
     const [disconnect, setDisconnect] = useState(false)
     const [bid, setBid] = useState();
-  
-  
-    // const form = document.getElementById('form');
-    // const input = document.getElementById('input');
-    // const messages = document.getElementById('messages');
+
     
     function handleStartGameButtonClick() {
       if (!mysocket) {return}
@@ -59,27 +55,41 @@ function Lobby({setPressedStartGame, setMyID, bidNplayer, setMyturn}) {
         setShowCards(bool)
       })
 
-      socket.on("turn", (turn) => {
+      socket.on("turn", (data) => { //data is a data {"turn": turn}
+        setTimeout(function() {
+          console.log("This message appears after 2 seconds.");
+        }, 2000); // 2000 milliseconds = 2 seconds
+
         console.log("its my turn!")
+        console.log(data)
+        setMyturn(data.turn)
 
-        //because its my turn, we can enable all the bid options
-
-        const bid2 = document.getElementById("2")
-        const bid3 = document.getElementById("3")
-        const bid4 = document.getElementById("4")
-        const bidpass = document.getElementById("0")
-        const bidbox = document.getElementById("bidbox") //confirming the bid will shut off all bid options so they can't be clicked 
-
-        if(!bid2){
-          return
+        //if a bid is present in the data, then that must be what the oppenent bid. 
+        console.log("data.bid", data.bid)
+        data.bid ? console.log("it exists") : console.log("it doesnt exist")
+        if(data.bid){
+          console.log("in the lop")
+          const opsbid = data.bid
+          console.log("datab.id 2", data.bid)
+          for(let i = parseInt(opsbid)+1; i<6; i++){
+            const temp = document.getElementById(String(i))
+            console.log("temp",temp)
+            temp.classList.remove("disabled")
+          }
+        } 
+        else{ //else, it means we are betting first. enable all buttons
+          for(let i = 2; i<6; i++){
+          const temp = document.getElementById(String(i))
+          if(temp){temp.classList.remove("disabled")}
         }
-        bid2.classList.remove("disabled")
-        bid3.classList.remove("disabled")
-        bid4.classList.remove("disabled")
-        bidpass.classList.remove("disabled")
+        }
+        // let opsbid = data.bid ?? 2; assidn opsbid to data bid if it exists, else 2
+        
+        const bidbox = document.getElementById("bidbox") //confirming the bid will shut off all bid options so they can't be clicked 
         bidbox.classList.remove("unclickable")
 
-        setMyturn(turn) // this sets myturn to 1
+        console.log("setting my turn varaible to ",data.turn)
+        setMyturn(data.turn) // this sets myturn to 1
       })
 
       socket.on("notturn", (turn) => {
@@ -89,11 +99,19 @@ function Lobby({setPressedStartGame, setMyID, bidNplayer, setMyturn}) {
         setMyturn(turn) // this sets myturn to 0
       })
 
-      socket.on("opponent's bid", (opbid) => {
-        console.log("opponent's bid!!!", opbid)
-        const IDtohighlight = "opbidof"+opbid
+      socket.on("opponent's bid", (data) => { //data is an object {"turn": turn, "bid":bidNplayer[0]}
+        console.log("opponent's bid!!!", data["bid"])
+        const IDtohighlight = "opbidof"+data["bid"]
         const opbuttontohighlight = document.getElementById(IDtohighlight)
         opbuttontohighlight.classList.add("highlight")
+
+        //if the bid is a pass, disable the pass button for you
+        if(data["bid"] == "5"){
+          console.log("oppenent passed! I have to bid at least 2")
+          const passbutton = document.getElementById("5")
+          passbutton.classList.add("disabled")
+        }
+
       })
 
       socket.on('show cardfield', bool => {

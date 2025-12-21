@@ -1,0 +1,32 @@
+library IEEE;
+use IEEE.std_logic_1164.all;
+use IEEE.numeric_std.all;
+
+entity ALU_2 is 
+
+ port(
+		B	: in	std_logic_vector(1 downto 0);
+		A	: in	std_logic_vector(1 downto 0);
+		Q	: out	std_logic_vector(3 downto 0);
+		Op	: in	std_logic_vector(1 downto 0)
+	);
+
+end ALU_2;
+
+
+architecture arch1 of ALU_2 is
+
+begin
+	process (A, B, Op)
+    begin
+    	if Op = "00" then
+    		Q <= "00" & A and "00" & B;
+    	elsif Op = "01" then -- Replace the underscores with the op code for the OR operation (between the quotes)
+    		Q <= "00" & A or "00" & B;	-- Assign the result of the OR operation to Q (before the semicolon)
+    	elsif Op = "10" then -- Replace the underscores with the op code for the ADD operation (between the quotes)
+    		Q <= "00" & A + "00" & B ; -- Assign the result of the ADD operation to Q (before the semicolon)
+    	elsif Op = "11" then -- Replace the underscores with the op code for the MULT operation (between the quotes)
+    		Q <= "00" & A * "00" & B; -- Assign the result of the MULT operation to Q (before the semicolon)
+    	end if;
+    end process;
+end arch1;

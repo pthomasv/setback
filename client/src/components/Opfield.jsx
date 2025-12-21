@@ -34,7 +34,7 @@ function Cardfield({myID}) {
             <div id="opbidof2" className='opbid op2'>2</div >
             <div id="opbidof3" className='opbid op3'>3</div >
             <div id="opbidof4" className='opbid op4'>4</div >
-            <div id="opbidof0" className='opbid oppass'>PASS</div >
+            <div id="opbidof5" className='opbid oppass'>PASS</div >
           </div>
         </div>
           <div className="opbox noselect">

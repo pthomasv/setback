@@ -63,7 +63,7 @@ function Cardfield({myID, setBidNplayer}) {
               <div id="2" onClick={(element) => {handleBidclick(element.target.id)}} className='bid disabled b2'>2</div >
               <div id="3" onClick={(element) =>{handleBidclick(element.target.id)}} className='bid b3 disabled'>3</div >
               <div id="4" onClick={(element) =>{handleBidclick(element.target.id)}} className='bid b4 disabled'>4</div >
-              <div id="0" onClick={(element) =>{handleBidclick(element.target.id)}} className='bid pass disabled'>PASS</div >
+              <div id="5" onClick={(element) =>{handleBidclick(element.target.id)}} className='bid pass disabled'>PASS</div >
             </div>
             {/* <div><b>YOUR BID</b></div> */}
             <button id="confirmbid" className='pulse-button disabled' onClick={()=> {handleConfirm()}}><b>CONFIRM</b></button>

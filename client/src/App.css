@@ -289,8 +289,7 @@
   cursor: not-allowed;           
   animation: none;               
   box-shadow: none !important;   
-  opacity: 0.8;   
-  
+  opacity: 0.8;  
 }
 
 .bid.disabled{
@@ -301,6 +300,15 @@
   box-shadow: none !important;   
   opacity: 0.8;  
   pointer-events: none;
+}
+
+.pass.disabled {
+  background-color: #e5e5e5;     
+  color: #9e9e9e;                
+  cursor: not-allowed;           
+  animation: none;               
+  box-shadow: none !important;   
+  opacity: 0.8;  
 }
 
 
