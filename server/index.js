@@ -123,8 +123,6 @@ app.get("/canijoin", (req, res) => {
   res.send({"game_started": game_started, "players": players});
 });
 
-
-
 io.on('connection', (socket) => { //when client connects, socket object is created, and its passed to the callback (socket)
     
     console.log('socket '+socket.id+' connected');
@@ -192,41 +190,32 @@ io.on('connection', (socket) => { //when client connects, socket object is creat
 
       }
 
+      setTimeout(function() {
+        console.log("This message appears after 2 seconds.");
+      }, 2000);
+
       console.log("notifying", whosturn(turn), "that it is their turn")
-      io.to(whosturn(turn)).emit("turn", 1)
+      io.to(whosturn(turn)).emit("turn", {"turn": 1})
       io.to(whosturnisitnot(turn)).emit("notturn", 0)
 
 
     })
 
     socket.on("my bid", (bidNplayer) => {
-      console.log("player", bidNplayer[1], "made", bidNplayer[0])
+      console.log("player", bidNplayer[1], "made a bid of", bidNplayer[0])
 
       //first, record the player's bid in the players dictionary
       players[String(bidNplayer[1])].bid = bidNplayer[0];
       //tell the opponent what the players bid was so they can highlight the opfield accordingly
-      io.to(whosturnisitnot(turn)).emit("opponent's bid", bidNplayer[0])
+      io.to(whosturnisitnot(turn)).emit("opponent's bid", {"turn": turn, "bid":bidNplayer[0]})
 
       //because we told the opponent the players bid, it is now the opponents bid. so we should increment the turn
       turn+=1
-      io.to(whosturn(turn)).emit("turn", 1) //notify the opponent it is their turn
+      io.to(whosturn(turn)).emit("turn", {"turn": turn, "bid":bidNplayer[0]}) //notify the opponent it is their turn
       io.to(whosturnisitnot(turn)).emit("notturn", 0) //notify the player it is not their turn
 
 
       console.log(players)
-      //now we need to tell the other player the players bid
-
-      //if player did bid of 4
-      // if(bidNplayer[0] == "bidof4"){
-      //   //we still store the bid
-        
-      //   //we don't increment the turn as it will be the players turn to start laying cards. but they still need to choose the suite
-
-      //   //notify the opponenet of the player's bid so that we can highlight the opfield bid number
-      //   io.to(whosturnisitnot(turn).emit("opponents bid", "4"))
-      // }
-
-      //if player did bid of 0 (pass)
     
     })
   });
