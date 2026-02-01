@@ -6,6 +6,7 @@ import { io } from "socket.io-client";
 function Cardfield({myID, setBidNplayer}) {
   const [hand, setHand] = useState([])
   const [lastselectedbidID, setLastselectedbidID] = useState("")
+  const [lastselectedcardID, setLastSelectedcardID] = useState()
   const playable_cards = cards
 
 
@@ -21,13 +22,36 @@ function Cardfield({myID, setBidNplayer}) {
 
   },[])
 
-  // useEffect(() => {
-  //   console.log("updated hand:", hand);
-  // }, [hand]);
+  function handleCardClick2(index){
+    
+    if(!lastselectedcardID && lastselectedcardID != 0){//first time selecting a card
+      setLastSelectedcardID(index)
+      const cardtoraise = document.getElementById(index)
+      cardtoraise.classList.add("raise")
+    }
 
-  function sharebidwithserver(bid){
-    console.log(bid)
+    else if(lastselectedcardID == index){ //either you lower the card you choose or raise it up again
+      console.log("here!")
+      const repeatedcard = document.getElementById(index)
+      console.log(repeatedcard.classList)
+      repeatedcard.classList.contains("raise") ? repeatedcard.classList.remove("raise") : repeatedcard.classList.add("raise")
+    }
+
+    else{
+      const cardtolower = document.getElementById(lastselectedcardID)
+      cardtolower.classList.remove("raise")
+      setLastSelectedcardID(index)
+      const cardtoraise = document.getElementById(index)
+      cardtoraise.classList.add("raise")
+    }
+
+    
+    //increase hight 
+    //record chosen card
+    //chosing next card should lower previous and raise new
+    //enable confirm button
   }
+
 
   function handleConfirm(){
     const confirm = document.getElementById("confirmbid")
@@ -41,7 +65,6 @@ function Cardfield({myID, setBidNplayer}) {
     if(lastselectedbidID){
       const lastselected = document.getElementById(lastselectedbidID)
       lastselected.classList.remove("selected")
-      
     }
     setLastselectedbidID(id)
     const currentselected = document.getElementById(id)
@@ -55,7 +78,8 @@ function Cardfield({myID, setBidNplayer}) {
       <div style={{ border: "1px", marginTop: "5vh"}}>
           <div className="box noselect">
             {hand.map((item,index) => 
-            <div style={{backgroundImage: `url(${`/src/assets/face/${item[1]}@1x.png`})`,backgroundSize: "cover",}} key={index}> 
+            <div id={index} onClick={() => handleCardClick2(index)}  //need to use annoymous function, otherwise the function is called on render and assigned to onclick 
+            style={{backgroundImage: `url(${`/src/assets/face/${item[1]}@1x.png`})`,backgroundSize: "cover",}} key={index}> 
             {item[1]}</div>)}
           </div>
           <div id="bidNpass" className="field "style={{border: "red solid 0px"}}>

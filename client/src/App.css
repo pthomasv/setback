@@ -73,9 +73,14 @@
   
 }
 
+.raise{
+  transform: translateY(-15px) !important;
+}
+
 .box div:hover{
   transform: translateY(-3px);
 }
+
 
 
 .opbox {
@@ -322,4 +327,32 @@
 
 .unclickable div{
   pointer-events: none;
+}
+
+.suit {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  border: 0px solid red;
+  height: 100px;
+  width: 100px;
+  border: red solid 1px
+}
+
+.spade{
+  background-image: url("/src/assets/spade.png");
+}
+
+.diamond {
+  background-image: url("/src/assets/diamond.svg");
+  background-size: cover;
+}
+
+.club{
+  background-image: url("/src/assets/club.png");
+  background-size: contain;
+}
+
+.heart{
+  background-image: url("/src/assets/heart.png");
 }

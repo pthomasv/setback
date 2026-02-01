@@ -30,7 +30,16 @@ function App() {
     {!pressedJoined && <Landing setTooManyPlayers={setTooManyPlayers} setPressedJoined={setPressedJoined} setGameStarted={setGameStarted}></Landing>}
     {/* we pass "setTooManyPlayers as a argument. If you look at the Landing function, you will see that it expects two arguments, setTooManyPlayers and setPressedJoined" */}
     {!toomanyPlayers && pressedJoined && <Lobby setPressedStartGame={setPressedStartGame} setMyID={setMyID} bidNplayer={bidNplayer} setMyturn={setMyturn}></Lobby>}
-    {pressedStartGame && <div><b>{myturn == 1 ? "YOUR TURN" : "OPPONENT'S TURN"}</b></div>}
+    <div style={{display: "flex", flexDirection: "row", alignItems: "center", gap: "8px" }}>
+      {pressedStartGame && <div><b>{myturn == 1 ? "YOUR TURN" : "OPPONENT'S TURN"}</b></div>}
+      <div className="suit heart"> </div>
+      <div className="suit spade"> </div>
+      <div className='suit' style={{backgroundImage: `url(${"/src/assets/diamond.svg"})`, backgroundSize: "cover", border: "red solid 0px", backgroundRepeat: "no-repeat",backgroundPosition: "center", height: "100px",width:"100px"}}> </div>
+      <div className="suit club"> </div>
+      
+
+
+    </div>
     {pressedStartGame && <Cardfield myID={myID} setBidNplayer={setBidNplayer}></Cardfield>}
     {gameStarted && <div>Game In Progress</div>}
     {toomanyPlayers && <div>Lobby Full</div>}
