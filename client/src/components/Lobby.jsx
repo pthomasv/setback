@@ -18,6 +18,8 @@ function Lobby({setPressedStartGame, setMyID, bidNplayer, setMyturn}) {
     const [test, setTest] = useState(0)
     const [disconnect, setDisconnect] = useState(false)
     const [bid, setBid] = useState();
+    const [clickable, setClickable] = useState(false)
+
 
     
     function handleStartGameButtonClick() {
@@ -68,7 +70,7 @@ function Lobby({setPressedStartGame, setMyID, bidNplayer, setMyturn}) {
         console.log("data.bid", data.bid)
         data.bid ? console.log("it exists") : console.log("it doesnt exist")
         if(data.bid){
-          console.log("in the lop")
+          console.log("in the loop")
           const opsbid = data.bid
           console.log("datab.id 2", data.bid)
           for(let i = parseInt(opsbid)+1; i<6; i++){
@@ -85,8 +87,6 @@ function Lobby({setPressedStartGame, setMyID, bidNplayer, setMyturn}) {
         }
         // let opsbid = data.bid ?? 2; assidn opsbid to data bid if it exists, else 2
         
-        const bidbox = document.getElementById("bidbox") //confirming the bid will shut off all bid options so they can't be clicked 
-        bidbox.classList.remove("unclickable")
 
         console.log("setting my turn varaible to ",data.turn)
         setMyturn(data.turn) // this sets myturn to 1
@@ -102,8 +102,8 @@ function Lobby({setPressedStartGame, setMyID, bidNplayer, setMyturn}) {
       socket.on("opponent's bid", (data) => { //data is an object {"turn": turn, "bid":bidNplayer[0]}
         console.log("opponent's bid!!!", data["bid"])
         const IDtohighlight = "opbidof"+data["bid"]
-        const opbuttontohighlight = document.getElementById(IDtohighlight)
-        opbuttontohighlight.classList.add("highlight")
+        // const opbuttontohighlight = document.getElementById(IDtohighlight)
+        // opbuttontohighlight.classList.add("highlight")
 
         //if the bid is a pass, disable the pass button for you
         if(data["bid"] == "5"){

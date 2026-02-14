@@ -134,11 +134,14 @@ io.on('connection', (socket) => { //when client connects, socket object is creat
         ready: false,
         showdeck: false,
         deck: [],
+        bidwinner: false,
         bid: [],
     }
 
-    turn = Object.keys(players).length
-    console.log("turn is", turn)
+    // TURN LOGIC 
+    function getRandomInt(max) {
+      return Math.floor(Math.random() * max);
+    }
     
     socket.on('disconnect', () => {
       console.log('user disconnected');
@@ -173,6 +176,9 @@ io.on('connection', (socket) => { //when client connects, socket object is creat
     })
 
     socket.on('pressed start',  (socket_id) => {
+      // turn = Object.keys(players).length
+      turn = getRandomInt(2)
+      console.log("turn is", turn)
       newDeck()
       game_started = true
       console.log("start game button pressed by user:", socket_id)

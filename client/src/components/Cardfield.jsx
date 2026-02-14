@@ -10,6 +10,7 @@ function Cardfield({myID, setBidNplayer}) {
   const playable_cards = cards
 
 
+
   useEffect(() => {fetch(`http://localhost:3000/gethand?id=${myID}`)
     .then(response => response.json())
     .then(data => { 
@@ -45,11 +46,8 @@ function Cardfield({myID, setBidNplayer}) {
       cardtoraise.classList.add("raise")
     }
 
-    
-    //increase hight 
-    //record chosen card
-    //chosing next card should lower previous and raise new
-    //enable confirm button
+    console.log("card", index, "was selected", hand[index])
+
   }
 
 
@@ -69,6 +67,7 @@ function Cardfield({myID, setBidNplayer}) {
     setLastselectedbidID(id)
     const currentselected = document.getElementById(id)
     currentselected.classList.add("selected")
+    console.log(currentselected.classList)
     const confirm = document.getElementById("confirmbid")
     confirm.classList.remove("disabled")
   }
@@ -88,6 +87,7 @@ function Cardfield({myID, setBidNplayer}) {
               <div id="3" onClick={(element) =>{handleBidclick(element.target.id)}} className='bid b3 disabled'>3</div >
               <div id="4" onClick={(element) =>{handleBidclick(element.target.id)}} className='bid b4 disabled'>4</div >
               <div id="5" onClick={(element) =>{handleBidclick(element.target.id)}} className='bid pass disabled'>PASS</div >
+              <div className='bid'> 4 </div>
             </div>
             {/* <div><b>YOUR BID</b></div> */}
             <button id="confirmbid" className='pulse-button disabled' onClick={()=> {handleConfirm()}}><b>CONFIRM</b></button>

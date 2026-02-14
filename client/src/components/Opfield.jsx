@@ -29,14 +29,14 @@ function Cardfield({myID}) {
   return (
     <>
       <div style={{ border: "0px red solid", marginBottom: "5vh"}}>
-        <div id="OPbidNpass" className="field" style={{ border: "0px red solid"}}>
+        {/* <div id="OPbidNpass" className="field" style={{ border: "0px red solid"}}>
           <div className="bidbox">
             <div id="opbidof2" className='opbid op2'>2</div >
             <div id="opbidof3" className='opbid op3'>3</div >
             <div id="opbidof4" className='opbid op4'>4</div >
             <div id="opbidof5" className='opbid oppass'>PASS</div >
           </div>
-        </div>
+        </div> */}
           <div className="opbox noselect">
             {hand.map((item,index) => 
             <div style={{backgroundImage: `url(${`/src/assets/backblue.png`})`,backgroundSize: "cover",}} key={index}> 

@@ -121,7 +121,7 @@
 }
 
 .b2{
-  background-color: grey;
+  background-color: darkgrey;
   border-top-left-radius: 10%;
   border-bottom-left-radius: 10%; 
 }
@@ -137,7 +137,7 @@
 }
 
 .b3{
-  background-color: grey; 
+  background-color: darkgrey; 
 }
 
 .b3.selected{
@@ -152,7 +152,7 @@
 }
 
 .b4{
-  background-color: grey; 
+  background-color: darkgrey; 
   border-top-right-radius: 10%;
   border-bottom-right-radius: 10%;
 }
@@ -179,7 +179,7 @@
 .pass{
   width: 50px; 
   height: 50px; 
-  background-color: grey; 
+  background-color: darkgrey; 
   border-radius: 50%;
   display: flex;
   align-items: center; 
@@ -329,30 +329,69 @@
   pointer-events: none;
 }
 
+.suit-input {
+  display: none;
+}
+
 .suit {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  border: 0px solid red;
   height: 100px;
   width: 100px;
-  border: red solid 1px
+   cursor: pointer;
 }
+
+.suit-input:checked + .suit {
+  outline: 3px solid gold;   /* highlight */
+}
+
+/* style={{backgroundImage: `url(${"/src/assets/diamond.svg"})`, backgroundSize: "contain", border: "red solid 1px", backgroundRepeat: "no-repeat",backgroundPosition: "center", height: "100px",width:"100px"}} */
 
 .spade{
   background-image: url("/src/assets/spade.png");
+  filter: opacity(.6);
 }
 
-.diamond {
-  background-image: url("/src/assets/diamond.svg");
-  background-size: cover;
+.diamond{
+  background-image: url("/src/assets/diamond.png");
+  background-size: contain;
+  filter: opacity(.6);
 }
 
 .club{
   background-image: url("/src/assets/club.png");
   background-size: contain;
+  filter: opacity(.6);
+  
 }
 
 .heart{
   background-image: url("/src/assets/heart.png");
+  background-size: cover;
+  filter: opacity(.6);
+}
+
+.highlight{
+  filter: saturate(1) brightness(1);
+}
+
+.master{
+  border-radius: 15px; /* Adjust the pixel value as needed */
+  border: 2px solid #000;
+  padding: 16px;
+}
+
+.suitfieldstyle{
+  display: flex; 
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border: red solid 0px;
+  gap: 8px; 
+  background-Color: darkgray;
+  padding: 8px;
+  border-radius: 15px;
+  margin-top: 8px;
+
 }
